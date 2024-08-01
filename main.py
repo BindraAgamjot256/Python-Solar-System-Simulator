@@ -17,10 +17,8 @@ MERCURY = (80, 78, 81)
 JUPITER = (201, 144, 57)
 URANUS = (173, 216, 230)
 NEPTUNE = (0, 0, 139)
-PLUTO = (139, 69, 19)
-ERIS = (153, 153, 255)
 SATURN = (255, 255, 102)
-ASTEROID = (255, 50, 50)
+ASTEROID = (255, 255, 255)
 
 FONT = pygame.font.SysFont("montserrat", 16)
 FONT_LARGE = pygame.font.SysFont("montserrat", 24)
@@ -29,7 +27,7 @@ class Planet:
     AU = 149.6e6 * 1000
     G = 6.67428e-11
     SCALE = 250 / AU
-    TIMESTEP = 3600 * 24
+    TIMESTEP = 5000 * 24
 
     def __init__(self, x, y, radius, color, mass, name):
         self.x = x
@@ -58,7 +56,7 @@ class Planet:
 
         pygame.draw.circle(win, self.color, (int(x), int(y)), int(radius))
 
-        if not self.sun:
+        if not self.sun and not self.asteroid:
             distance_text = FONT.render(f"{self.name}: {round((self.distance_to_sun / 149597870700), 2)} AU", True, VENUS)
             win.blit(distance_text, (x - distance_text.get_width() / 2, y - distance_text.get_height() / 2))
 
@@ -96,7 +94,7 @@ class Planet:
 def generate_starry_background():
     bg = pygame.Surface((WIDTH, HEIGHT))
     bg.fill((0, 0, 0))
-    num_stars = 200
+    num_stars = 100
     for _ in range(num_stars):
         x = random.randint(0, WIDTH)
         y = random.randint(0, HEIGHT)
@@ -142,21 +140,31 @@ def initialize_planets():
         angle = random.uniform(0, 2 * math.pi)
         x = distance_from_sun * math.cos(angle)
         y = distance_from_sun * math.sin(angle)
-        radius = random.uniform(4, 12)
+        radius = random.uniform(4, 8)
         mass = random.uniform(1e19, 1e20)
-        asteroid = Planet(x, y, radius, VENUS, mass, "")
-        asteroid.sun = True
+        asteroid = Planet(x, y, radius, ASTEROID, mass, "")
+        asteroid.sun = False
         asteroid.asteroid = True
-        # Compute velocity for a stable orbit
-        speed = random.choice([orbital_velocity(distance_from_sun),-orbital_velocity(distance_from_sun)])
+        speed = orbital_velocity(distance_from_sun)
         asteroid.x_vel = -speed * math.sin(angle)
         asteroid.y_vel = speed * math.cos(angle)
-        
         asteroids.append(asteroid)
-        
-    listPlanets.extend(asteroids)
-    return listPlanets
 
+    listPlanets.extend(asteroids)
+
+
+    # The following lines contain code for a second sun, to simulate a binary star system
+    # sun2 = Planet(0, 0, 30, SUN, 1.98892e30, "Sun")
+    # sun2.y_vel = 13.07e3
+    # sun2.x = -5*Planet.AU
+    # listPlanets.append(sun2)
+
+
+    # The following lines contain code for a black hole. A creative liberty has been taken in making the black hloe white,to necessitate its viability upon the black background
+    # BlackHole = Planet(-10 * Planet.AU, 0, 1, (255,255,255), 1.98892e30, "Black Hole")
+    # BlackHole.y_vel = 10e3
+    # listPlanets.append(BlackHole)
+    return listPlanets
 
 def handle_events():
     keys = pygame.key.get_pressed()
