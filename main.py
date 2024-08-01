@@ -151,19 +151,6 @@ def initialize_planets():
         asteroids.append(asteroid)
 
     listPlanets.extend(asteroids)
-
-
-    # The following lines contain code for a second sun, to simulate a binary star system
-    # sun2 = Planet(0, 0, 30, SUN, 1.98892e30, "Sun")
-    # sun2.y_vel = 13.07e3
-    # sun2.x = -5*Planet.AU
-    # listPlanets.append(sun2)
-
-
-    # The following lines contain code for a black hole. A creative liberty has been taken in making the black hloe white,to necessitate its viability upon the black background
-    # BlackHole = Planet(-10 * Planet.AU, 0, 1, (255,255,255), 1.98892e30, "Black Hole")
-    # BlackHole.y_vel = 10e3
-    # listPlanets.append(BlackHole)
     return listPlanets
 
 def handle_events():
