@@ -48,7 +48,7 @@ class Planet:
         y = self.y * self.SCALE * zoom + HEIGHT / 2 + offset_y
         radius = self.radius * zoom
 
-        if len(self.orbit) > 2 and not(self.asteroid):
+        if len(self.orbit) > 2 and not self.asteroid:
             updated_points = [(px * self.SCALE * zoom + WIDTH / 2 + offset_x,
                                py * self.SCALE * zoom + HEIGHT / 2 + offset_y)
                               for (px, py) in self.orbit]
